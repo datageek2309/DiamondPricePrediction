@@ -8,10 +8,10 @@ class CustomExpection(Exception):
 
     def __init__(self,error_message:str,error_detail:sys) -> None:
         super().__init__(error_message)
-        self.error_message=CustomExpection.error_message_detail(error=error_message,error_detail=error_detail)
+        self.error_message=self.error_message_detail(error=error_message,error_detail=error_detail)
     
-    @classmethod
-    def error_message_detail(cls,error:str,error_detail:sys)->str:
+    @staticmethod
+    def error_message_detail(error:str,error_detail:sys)->str:
         try:
             _,_,exc_tb=error_detail.exc_info()
             file_name=exc_tb.tb_frame.f_code.co_filename
