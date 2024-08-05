@@ -11,7 +11,7 @@ class PredictPipeline:
     def __init__(self) -> None:
         pass
 
-    def predict(self,features:List[str,int,float])->None:
+    def predict(self,features:pd.DataFrame)->None:
 
         try:
             # Getting the paths of objects stored
@@ -23,7 +23,7 @@ class PredictPipeline:
             model=load_obj(model_path)
 
             #Performing the prediction
-            transformed_data=preprocessor.tranform(features)
+            transformed_data=preprocessor.transform(features)
             predicted_result=model.predict(transformed_data)
             return predicted_result
         except Exception as e:
@@ -70,6 +70,5 @@ class CustomData:
             return df
         except Exception as e:
             logging.info('Exception Occured in prediction pipeline')
-            raise CustomException(e,sys)
-
-
+            raise CustomExpection(e,sys)
+    
