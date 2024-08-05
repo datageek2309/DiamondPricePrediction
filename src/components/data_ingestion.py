@@ -29,7 +29,7 @@ class DataIngestion:
 
     def initiate_data_ingestion(self)->Tuple[str]:
         try:
-            raw_data=pd.read_csv(self.ingestion_config.filepath)
+            raw_data=pd.read_csv(self.ingestion_config.file_path)
             # Creating/Copying Raw data file
             os.makedirs(os.path.dirname(self.ingestion_config.raw_data_path),exist_ok=True)
             if os.path.dirname(self.ingestion_config.raw_data_path):

@@ -17,13 +17,13 @@ from sklearn.linear_model import LinearRegression,Ridge,Lasso,ElasticNet
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor,AdaBoostRegressor,GradientBoostingRegressor
 from dataclasses import dataclass
-from utils import save_object
+from src.utils import save_object
 from typing import List,Tuple
 
 @dataclass
 class DataTransformationConfig:
-    os.makedirs(os.path.dirname("artifacts"),exist_ok=True)
-    preprocessor_obj_path=os.path.join("artifcats","preprocessor.pkl")
+    os.makedirs(os.path.dirname(os.path.join("artifacts","preprocessor.pkl")),exist_ok=True)
+    preprocessor_obj_path=os.path.join("artifacts","preprocessor.pkl")
 
 class DataTransformation:
 
@@ -82,26 +82,27 @@ class DataTransformation:
 
             #Training Data
             input_feature_train_df=train_data.drop(drop_column,axis=1) # output is dataframe
-            target_feature_train_df=train_data['Price'] # output is series
+            target_feature_train_df=train_data['price'] # output is series
 
             #Testing Data
             input_feature_test_df=test_data.drop(drop_column,axis=1) # output is dataframe
-            target_feature_test_df=test_data['Price'] # output is series
+            target_feature_test_df=test_data['price'] # output is series
 
             # Data Tranformation
             input_feature_train_arr=preprocessor_obj.fit_transform(input_feature_train_df) # array
             input_feature_test_arr=preprocessor_obj.transform(input_feature_test_df) # array
             
             # Concatinating  both dependent and independent features
-            train_arr=np.c_([input_feature_train_arr,np.array(target_feature_train_df)])
-            test_arr=np.c_([input_feature_test_arr,np.array(target_feature_test_df)])
+            # train_arr=np.c_([input_feature_train_arr,np.array(target_feature_train_df)])
+            # test_arr=np.c_([input_feature_test_arr,np.array(target_feature_test_df)])
 
             # Saving the preprocessor obj after tranforming the data
             save_object(
                 file_path=self.data_tranformation_config.preprocessor_obj_path,
                 obj=preprocessor_obj
             )
-            return train_arr,test_arr,self.data_tranformation_config.preprocessor_obj_path
+
+            return input_feature_train_arr,np.array(target_feature_train_df),input_feature_test_arr,np.array(target_feature_test_df)
         except Exception as e:
             logging.info("Error has occured during Data Tranformation Process")
             raise CustomExpection(e,sys)
